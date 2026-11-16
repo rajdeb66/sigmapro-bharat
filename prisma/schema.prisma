@@ -1,0 +1,161 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String   @id @default(cuid())
+  name              String?
+  email             String   @unique
+  role              Role
+  verifiedStatus    Boolean  @default(false)
+  kycStatus         Boolean  @default(false)
+  riskTolerance     String?
+  createdAt         DateTime @default(now())
+  providerProfile   ProviderProfile?
+  bookingsAsClient  Booking[] @relation("ClientBookings")
+  bookingsAsProvider Booking[] @relation("ProviderBookings")
+  messages          Message[]
+  reviews           Review[]
+}
+
+enum Role {
+  CLIENT
+  PROVIDER
+  ADMIN
+}
+
+model ProviderProfile {
+  id                     String   @id @default(cuid())
+  userId                 String   @unique
+  bio                    String?
+  specialties            String[]
+  verificationBadges    String[],
+  verificationDocs    String[]
+  hourlyRate             Float?
+  subscriptionPrice      Float?
+  rating                 Float?   @default(0)
+  totalReviews           Int      @default(0)
+  verifiedTrackRecordUrl String?
+  user                   User     @relation(fields: [userId], references: [id])
+  services               Service[]
+}
+
+model Service {
+  id               String   @id @default(cuid())
+  providerId       String
+  title            String
+  description      String
+  price            Float
+  type             ServiceType
+  deliveryMethod   String
+  category         String
+  provider         ProviderProfile @relation(fields: [providerId], references: [id])
+  bookings         Booking[]
+}
+
+enum ServiceType {
+  SIGNAL_PACKAGE
+  CONSULTATION
+}
+
+model Booking {
+  id               String   @id @default(cuid())
+  clientId         String
+  providerId       String
+  serviceId        String
+  status           BookingStatus @default(PENDING)
+  startDate        DateTime?
+  endDate          DateTime?
+  escrowStatus     EscrowStatus @default(PENDING)
+  client           User @relation("ClientBookings", fields: [clientId], references: [id])
+  provider         User @relation("ProviderBookings", fields: [providerId], references: [id])
+  service          Service @relation(fields: [serviceId], references: [id])
+  signals          Signal[]
+  messages         Message[]
+  transaction      Transaction?
+  review           Review?
+}
+
+enum BookingStatus {
+  PENDING
+  PAID
+  ACTIVE
+  COMPLETED
+  DISPUTED
+}
+
+enum EscrowStatus {
+  PENDING
+  RELEASED
+  REFUNDED
+}
+
+model Signal {
+  id            String   @id @default(cuid())
+  bookingId     String
+  providerId    String
+  ticker        String
+  side          Side
+  entryPrice    Float
+  targetPrice   Float
+  stopLoss      Float
+  status        SignalStatus @default(OPEN)
+  deliveredAt   DateTime @default(now())
+  booking       Booking @relation(fields: [bookingId], references: [id])
+}
+
+enum Side {
+  BUY
+  SELL
+}
+
+enum SignalStatus {
+  OPEN
+  CLOSED
+}
+
+model Message {
+  id          String   @id @default(cuid())
+  bookingId   String
+  senderId    String
+  content     String
+  timestamp   DateTime @default(now())
+  type        MessageType
+  booking     Booking @relation(fields: [bookingId], references: [id])
+}
+
+enum MessageType {
+  TEXT
+  FILE
+}
+
+model Transaction {
+  id               String   @id @default(cuid())
+  bookingId        String   @unique
+  amount           Float
+  platformFee      Float
+  providerPayout   Float
+  status           TransactionStatus @default(PENDING)
+  booking          Booking @relation(fields: [bookingId], references: [id])
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  bookingId   String   @unique
+  rating      Int
+  comment     String?
+  createdAt   DateTime @default(now())
+  booking     Booking @relation(fields: [bookingId], references: [id])
+}

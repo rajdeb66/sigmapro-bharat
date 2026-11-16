@@ -1,0 +1,100 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --brand-navy: #0a0e1a;
+  --brand-dark: #0d1117;
+  --brand-card: #151b28;
+  --brand-border: #1e293b;
+  --brand-blue: #3b82f6;
+  --brand-gold: #f59e0b;
+  --brand-green: #10b981;
+  --brand-red: #ef4444;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #1e293b #0a0e1a;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #0a0e1a;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #1e293b;
+  border-radius: 3px;
+}
+
+body {
+  background-color: #0a0e1a;
+  color: #f8fafc;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+@layer components {
+  .sigma-card {
+    @apply bg-brand-card border border-brand-border rounded-xl p-6 transition-all duration-200;
+  }
+  .sigma-card:hover {
+    @apply border-brand-blue/40 shadow-lg shadow-brand-blue/5;
+  }
+  .sigma-btn-primary {
+    @apply bg-brand-blue hover:bg-brand-blue-hover text-white font-semibold px-6 py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2;
+  }
+  .sigma-btn-gold {
+    @apply bg-brand-gold hover:bg-brand-gold-hover text-black font-semibold px-6 py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2;
+  }
+  .sigma-btn-outline {
+    @apply border border-brand-border hover:border-brand-blue text-white font-medium px-6 py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2;
+  }
+  .sigma-input {
+    @apply bg-brand-dark border border-brand-border rounded-lg px-4 py-3 text-white placeholder-brand-muted focus:outline-none focus:ring-2 focus:ring-brand-blue/50 focus:border-brand-blue transition-all duration-200 w-full;
+  }
+  .sigma-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .sigma-badge-blue {
+    @apply sigma-badge bg-brand-blue/10 text-brand-blue border border-brand-blue/20;
+  }
+  .sigma-badge-gold {
+    @apply sigma-badge bg-brand-gold/10 text-brand-gold border border-brand-gold/20;
+  }
+  .sigma-badge-green {
+    @apply sigma-badge bg-brand-green/10 text-brand-green border border-brand-green/20;
+  }
+  .sigma-badge-red {
+    @apply sigma-badge bg-brand-red/10 text-brand-red border border-brand-red/20;
+  }
+  .sigma-glow {
+    box-shadow: 0 0 60px rgba(59, 130, 246, 0.15), 0 0 120px rgba(59, 130, 246, 0.05);
+  }
+  .sigma-gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-blue to-brand-gold;
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); }
+  50% { box-shadow: 0 0 40px rgba(59, 130, 246, 0.4); }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
