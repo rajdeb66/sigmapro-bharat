@@ -28,11 +28,14 @@ import {
   Award,
   Play,
   Star,
+  ExternalLink,
 } from "lucide-react";
+import VerifiedPnlModal from "@/components/fomo/VerifiedPnlModal";
 
 export default function IndianMarketMVPPage() {
   const [selectedSegment, setSelectedSegment] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState("");
+  const [isVerifiedPnlOpen, setIsVerifiedPnlOpen] = useState(false);
 
   // Major Indian Market Indices Data
   const majorIndices = [
@@ -377,7 +380,7 @@ export default function IndianMarketMVPPage() {
                 Unlock certified high-conviction Nifty & Bank Nifty F&O setups, multibagger cash swings, and master institutional trading strategies from SEBI-registered mentors.
               </p>
 
-              {/* 3 Action Pillars */}
+              {/* Action Pillars & Audited Ledger */}
               <div className="mt-6 flex flex-wrap items-center gap-3">
                 <Link
                   href="/plans"
@@ -393,6 +396,13 @@ export default function IndianMarketMVPPage() {
                   <GraduationCap className="h-4 w-4" />
                   Academy Courses Store
                 </Link>
+                <button
+                  onClick={() => setIsVerifiedPnlOpen(true)}
+                  className="sigma-btn-outline text-xs !py-3 !px-4 font-bold flex items-center gap-2 border-brand-green/40 text-brand-green hover:bg-brand-green/10"
+                >
+                  <ShieldCheck className="h-4 w-4 text-brand-green" />
+                  Sensibull Audited Ledger
+                </button>
                 <Link
                   href="/dashboard"
                   className="sigma-btn-outline text-xs !py-3 !px-4 font-bold flex items-center gap-2"
@@ -405,13 +415,24 @@ export default function IndianMarketMVPPage() {
 
             {/* Quick Live Stats Pill Box */}
             <div className="grid grid-cols-2 gap-3 sm:w-80 bg-brand-dark/80 p-4 rounded-2xl border border-brand-border/80 shadow-inner">
-              <div className="p-3 bg-brand-card/70 rounded-xl border border-brand-border/40">
-                <span className="text-[10px] uppercase font-bold text-brand-muted block">
-                  Historical Win Rate
+              <button
+                onClick={() => setIsVerifiedPnlOpen(true)}
+                className="p-3 bg-brand-card/70 hover:bg-brand-card rounded-xl border border-brand-border/40 hover:border-brand-gold/60 text-left transition-all group cursor-pointer"
+                title="Click to view verified P&L breakdown"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] uppercase font-bold text-brand-muted block">
+                    Historical Win Rate
+                  </span>
+                  <ExternalLink className="h-3 w-3 text-brand-gold opacity-60 group-hover:opacity-100 transition-opacity" />
+                </div>
+                <span className="text-2xl font-black text-brand-gold font-mono group-hover:scale-105 inline-block transition-transform">
+                  82.4%
                 </span>
-                <span className="text-2xl font-black text-brand-gold font-mono">82.4%</span>
-                <span className="text-[10px] text-brand-muted block">Audited 2026 Batch</span>
-              </div>
+                <span className="text-[10px] text-brand-green font-semibold block flex items-center gap-1">
+                  <CheckCircle2 className="h-3 w-3 inline" /> Sensibull Audited ↗
+                </span>
+              </button>
               <div className="p-3 bg-brand-card/70 rounded-xl border border-brand-border/40">
                 <span className="text-[10px] uppercase font-bold text-brand-muted block">
                   Active Calls Today
@@ -1033,6 +1054,12 @@ export default function IndianMarketMVPPage() {
       </main>
 
       <Footer />
+
+      {/* Sensibull Audited Performance Ledger Modal */}
+      <VerifiedPnlModal
+        isOpen={isVerifiedPnlOpen}
+        onClose={() => setIsVerifiedPnlOpen(false)}
+      />
     </>
   );
 }
