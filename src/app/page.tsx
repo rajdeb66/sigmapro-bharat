@@ -33,12 +33,14 @@ import {
   Check,
 } from "lucide-react";
 import VerifiedPnlModal from "@/components/fomo/VerifiedPnlModal";
+import AiTradeThesisDrawer, { TradeCallWithThesis } from "@/components/research/AiTradeThesisDrawer";
 
 export default function IndianMarketMVPPage() {
   const [selectedSegment, setSelectedSegment] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [isVerifiedPnlOpen, setIsVerifiedPnlOpen] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [activeThesisCall, setActiveThesisCall] = useState<TradeCallWithThesis | null>(null);
 
   const handleCopyLevels = (call: typeof tradingCalls[0]) => {
     const text = `SIGMAPRO RESEARCH SETUP:\nScrip: ${call.scrip} (${call.segment})\nAction: ${call.side}\nBuy Range: ${call.entry}\nTarget 1: ${call.target1} | Target 2: ${call.target2}\nInvalidation (SL): ${call.stopLoss}\nAnalyst: ${call.analyst} (${call.sebiReg})\n*Execute independently on your broker terminal.`;
@@ -188,7 +190,7 @@ export default function IndianMarketMVPPage() {
   ];
 
   // Today's High-Conviction Trading Calls (Indian Market Specific with Locked vs. Unlocked Teaser)
-  const tradingCalls = [
+  const tradingCalls: TradeCallWithThesis[] = [
     {
       id: "call-1",
       scrip: "BANKNIFTY 51800 CE",
@@ -209,6 +211,39 @@ export default function IndianMarketMVPPage() {
       rationale:
         "HDFC Bank and ICICI Bank breaking 5-minute resistance simultaneously. High call open interest unwinding observed at 51,700 strike.",
       isLocked: false,
+      thesisData: {
+        setupType: "Institutional Strike Gamma Scalp",
+        convictionPct: 94,
+        timeframe: "15-Min & Hourly Confluence",
+        catalysts: [
+          {
+            category: "DERIVATIVE_OI",
+            tag: "51,700 Strike Unwinding",
+            title: "Massive Call Short-Covering Squeeze",
+            description: "Over 38 lakh call contracts liquidated in 20 minutes as Bank Nifty crossed 51,680 pivot, triggering forced gamma buying by option writers.",
+          },
+          {
+            category: "TECHNICAL",
+            tag: "VWAP & 20-EMA Bounce",
+            title: "HDFC Bank & ICICI Bank Relative Strength",
+            description: "Top two index constituents breached morning VWAP simultaneously with RSI rising above 62 on the 15-minute chart with expanding Bollinger bands.",
+          },
+          {
+            category: "INSTITUTIONAL",
+            tag: "FII Long/Short Rebound",
+            title: "Institutional Net Index Futures Accumulation",
+            description: "Foreign Institutional Investors added +14,200 long index futures contracts in morning trade, skewing the intraday PCR from 0.82 to 1.18.",
+          },
+        ],
+        invalidationRule: "Strict Invalidation Rule: If Bank Nifty spot closes below 51,580 or the premium breaks ₹180 on a 5-minute candle, close entire position immediately. No averaging down.",
+        audioDuration: "0:36",
+        audioBriefingScript: "Desk update on Bank Nifty 51,800 Call: We are seeing heavy short covering on the 51,700 strike led by private banks. Buy range is 240 to 250 with hard stop at 180. First objective is 340, second at 420. Trail aggressively once Target 1 hits.",
+        entryNum: 245,
+        target1Num: 340,
+        target2Num: 420,
+        stopLossNum: 180,
+        lotSize: 15,
+      },
     },
     {
       id: "call-locked-1",
@@ -232,6 +267,39 @@ export default function IndianMarketMVPPage() {
       isLocked: true,
       unlockPlan: "Nifty & Bank Nifty F&O Alpha Pass",
       planHref: "/plans",
+      thesisData: {
+        setupType: "Expiry Day 0DTE Gamma Squeeze",
+        convictionPct: 89,
+        timeframe: "5-Minute Micro Structure",
+        catalysts: [
+          {
+            category: "DERIVATIVE_OI",
+            tag: "Expiry Gamma Flow",
+            title: "Heavy Call Wall at 51,500 Strike",
+            description: "Institutional writers heavily pegged 51,500 CE with 1.2 Crore open interest. Any rejection beneath 51,320 triggers cascading long put gamma.",
+          },
+          {
+            category: "TECHNICAL",
+            tag: "Bear Flag Breakdown",
+            title: "Lower Highs on Multi-Bank Breadth",
+            description: "PSU Banks showing heavy profit taking after 3-day rally, breaking VWAP support line with negative volume balance.",
+          },
+          {
+            category: "INSTITUTIONAL",
+            tag: "Smart Money Hedging",
+            title: "Pre-Expiry Institutional Delta Hedging",
+            description: "Prop desks buying downside puts to hedge large equity blocks, creating an asymmetric 3.2x to 5.5x payoff ratio.",
+          },
+        ],
+        invalidationRule: "Strict Hero-Zero Invalidation: Capital allocated to this trade must be limited to 2% max portfolio risk. Exit if spot crosses back above 51,450.",
+        audioDuration: "0:42",
+        audioBriefingScript: "VIP Desk Alert: 0DTE Hero-Zero setup active on Bank Nifty downside. Premium is low delta but gamma risk is high. Strict capital allocation of 2 percent. Watch the 51,320 breakdown level.",
+        entryNum: 55,
+        target1Num: 175,
+        target2Num: 300,
+        stopLossNum: 25,
+        lotSize: 15,
+      },
     },
     {
       id: "call-2",
@@ -253,6 +321,39 @@ export default function IndianMarketMVPPage() {
       rationale:
         "Double bottom formation completed on daily timeframe near 200 EMA support. Refined products margin recovery boosting earnings outlook.",
       isLocked: false,
+      thesisData: {
+        setupType: "Positional Mean Reversion & Value Breakout",
+        convictionPct: 92,
+        timeframe: "Daily & Weekly Timeframe",
+        catalysts: [
+          {
+            category: "TECHNICAL",
+            tag: "200-Day EMA Support",
+            title: "Confirmed Double Bottom Base with Bullish Divergence",
+            description: "Stock has tested the ₹1,250 - ₹1,260 institutional demand zone 3 times and printed a weekly bullish hammer with weekly MACD bullish crossover.",
+          },
+          {
+            category: "FUNDAMENTAL",
+            tag: "Gross Refining Margins (GRM)",
+            title: "Refining Spread Recovery & Telecom ARPU Expansion",
+            description: "Singapore GRM recovered to $7.2/bbl, providing direct earnings tailwind to oil-to-chemicals segment alongside higher Jio tariff monetization.",
+          },
+          {
+            category: "INSTITUTIONAL",
+            tag: "DII & Mutual Fund Accumulation",
+            title: "High Delivery Volumes (Over 58% NSE Delivery)",
+            description: "Domestic Mutual Funds have accumulated 42 lakh shares across the last 5 trading days at average price of ₹1,262.",
+          },
+        ],
+        invalidationRule: "Positional Invalidation: Daily close below ₹1,230 invalidates the 200-EMA support thesis. Maintain strict positional stop-loss.",
+        audioDuration: "0:45",
+        audioBriefingScript: "Reliance research note: We are initiating a high conviction cash delivery swing buy between 1,265 and 1,272. This is backed by 200 EMA double bottom support and rising refining spreads. Targets are 1,340 and 1,390 with a stop loss of 1,230.",
+        entryNum: 1268,
+        target1Num: 1340,
+        target2Num: 1390,
+        stopLossNum: 1230,
+        lotSize: 1,
+      },
     },
     {
       id: "call-locked-2",
@@ -770,7 +871,7 @@ export default function IndianMarketMVPPage() {
 
                     {/* Rationale / Teaser Box */}
                     {isLocked ? (
-                      <div className="bg-brand-dark/90 p-3 rounded-xl border border-brand-gold/30 mb-4 relative">
+                      <div className="bg-brand-dark/90 p-3 rounded-xl border border-brand-gold/30 mb-3 relative">
                         <div className="flex items-center gap-1.5 text-brand-gold text-xs font-bold mb-1">
                           <Lock className="h-3.5 w-3.5" />
                           <span>Requires {call.unlockPlan}</span>
@@ -780,10 +881,30 @@ export default function IndianMarketMVPPage() {
                         </p>
                       </div>
                     ) : (
-                      <p className="text-xs text-brand-muted leading-relaxed bg-brand-dark/40 p-3 rounded-xl border border-brand-border/40 mb-4">
+                      <p className="text-xs text-brand-muted leading-relaxed bg-brand-dark/40 p-3 rounded-xl border border-brand-border/40 mb-3">
                         <strong className="text-white">Research Rationale:</strong> {call.rationale}
                       </p>
                     )}
+
+                    {/* "Why This Trade?" AI Thesis Drawer Trigger */}
+                    <button
+                      type="button"
+                      onClick={() => setActiveThesisCall(call)}
+                      className="w-full mb-3 py-2 px-3 rounded-xl bg-gradient-to-r from-brand-dark via-brand-card to-brand-dark hover:from-brand-blue/15 hover:to-brand-gold/15 border border-brand-border/80 hover:border-brand-gold/50 text-white flex items-center justify-between text-xs font-semibold group transition-all shadow-sm"
+                    >
+                      <span className="flex items-center gap-1.5 text-brand-gold">
+                        <Sparkles className="h-3.5 w-3.5 animate-pulse text-brand-gold" />
+                        <span className="text-white group-hover:text-brand-gold transition-colors font-bold text-[11px]">
+                          Why This Trade?
+                        </span>
+                        <span className="text-[9px] bg-brand-gold/20 text-brand-gold px-1.5 py-0.2 rounded font-black border border-brand-gold/30">
+                          AI THESIS
+                        </span>
+                      </span>
+                      <span className="text-[10px] text-brand-muted flex items-center gap-1 group-hover:text-white transition-colors font-medium">
+                        Catalysts & R:R <ChevronRight className="h-3 w-3 group-hover:translate-x-0.5 transition-transform" />
+                      </span>
+                    </button>
                   </div>
 
                   {/* Bottom Bar: SEBI Analyst Info & CTA */}
@@ -1101,6 +1222,14 @@ export default function IndianMarketMVPPage() {
       <VerifiedPnlModal
         isOpen={isVerifiedPnlOpen}
         onClose={() => setIsVerifiedPnlOpen(false)}
+      />
+
+      {/* "Why This Trade?" AI Thesis Drawer */}
+      <AiTradeThesisDrawer
+        call={activeThesisCall}
+        isOpen={!!activeThesisCall}
+        onClose={() => setActiveThesisCall(null)}
+        onCopyLevels={handleCopyLevels}
       />
     </>
   );
