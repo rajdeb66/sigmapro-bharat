@@ -13,12 +13,12 @@ export default function Footer() {
             <span className="text-base font-bold text-white">
               SIGMA<span className="text-brand-gold">PRO</span> BHARAT
             </span>
-            <span className="text-xs text-brand-muted">• Indian Trading & Investment Alpha</span>
+            <span className="text-xs text-brand-muted">• SEBI Registered Research Advisory</span>
           </div>
 
           <div className="flex items-center gap-2 text-xs text-brand-muted">
             <ShieldCheck className="h-4 w-4 text-brand-green" />
-            <span>SEBI Research Analyst Compliant • NSE / BSE Market Data</span>
+            <span>SEBI Reg. Research Analyst INH000008492 • Independent Advisory — Not a Broker</span>
           </div>
         </div>
 

@@ -79,6 +79,16 @@ body {
   .sigma-gradient-text {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-blue to-brand-gold;
   }
+  /* Glassmorphism card — for young trader-facing clean UI */
+  .sigma-glass {
+    @apply backdrop-blur-xl bg-white/[0.03] border border-white/10 rounded-2xl;
+  }
+  .sigma-glass-gold {
+    @apply backdrop-blur-xl bg-brand-gold/[0.04] border border-brand-gold/20 rounded-2xl;
+  }
+  .sigma-glass-green {
+    @apply backdrop-blur-xl bg-brand-green/[0.04] border border-brand-green/20 rounded-2xl;
+  }
 }
 
 @keyframes pulse-glow {

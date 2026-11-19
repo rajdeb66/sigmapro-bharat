@@ -29,6 +29,8 @@ import {
   Play,
   Star,
   ExternalLink,
+  Copy,
+  Check,
 } from "lucide-react";
 import VerifiedPnlModal from "@/components/fomo/VerifiedPnlModal";
 
@@ -36,6 +38,14 @@ export default function IndianMarketMVPPage() {
   const [selectedSegment, setSelectedSegment] = useState<string>("ALL");
   const [searchQuery, setSearchQuery] = useState("");
   const [isVerifiedPnlOpen, setIsVerifiedPnlOpen] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopyLevels = (call: typeof tradingCalls[0]) => {
+    const text = `SIGMAPRO RESEARCH SETUP:\nScrip: ${call.scrip} (${call.segment})\nAction: ${call.side}\nBuy Range: ${call.entry}\nTarget 1: ${call.target1} | Target 2: ${call.target2}\nInvalidation (SL): ${call.stopLoss}\nAnalyst: ${call.analyst} (${call.sebiReg})\n*Execute independently on your broker terminal.`;
+    navigator.clipboard.writeText(text);
+    setCopiedId(call.id);
+    setTimeout(() => setCopiedId(null), 2500);
+  };
 
   // Major Indian Market Indices Data
   const majorIndices = [
@@ -355,8 +365,21 @@ export default function IndianMarketMVPPage() {
     <>
       <Navbar />
 
-      <main className="min-h-screen pt-28 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
-        {/* Hero Banner with Indian Market Overview & Direct Store CTAs */}
+      <main className="min-h-screen pt-28 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-10">
+        {/* Independent Advisory Notice */}
+        <div className="bg-brand-card/90 border border-brand-border/90 rounded-2xl p-3.5 px-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs shadow-md">
+          <div className="flex items-center gap-2.5">
+            <ShieldCheck className="h-4 w-4 text-brand-green shrink-0" />
+            <span className="text-brand-muted leading-relaxed">
+              <strong className="text-white">Advisory Disclosure:</strong> SIGMAPRO is an independent SEBI Registered Research Analyst advisory firm (<span className="text-brand-gold font-mono font-bold">INH000008492</span>). We provide research recommendations and education; we are not a stock broker. All trades must be executed independently on your personal broker terminal.
+            </span>
+          </div>
+          <span className="text-[10px] uppercase font-bold tracking-wider text-brand-gold shrink-0 bg-brand-gold/10 border border-brand-gold/25 px-2.5 py-1 rounded-lg">
+            Research &amp; Advisory Only
+          </span>
+        </div>
+
+        {/* Hero Banner with Institutional Overview & Direct Action Pillars */}
         <div className="bg-gradient-to-br from-brand-card via-brand-dark to-brand-card border border-brand-border rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden">
           <div className="absolute top-0 right-0 w-96 h-96 bg-brand-blue/10 rounded-full blur-3xl -z-10 pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-96 h-96 bg-brand-gold/10 rounded-full blur-3xl -z-10 pointer-events-none" />
@@ -365,19 +388,19 @@ export default function IndianMarketMVPPage() {
             <div className="max-w-2xl">
               <div className="flex flex-wrap items-center gap-2 mb-3">
                 <span className="sigma-badge-gold text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 shadow-sm">
-                  <ShieldCheck className="h-3.5 w-3.5" /> SEBI Registered Advisory & Academy
+                  <ShieldCheck className="h-3.5 w-3.5" /> SEBI Registered Advisory &amp; Academy
                 </span>
-                <span className="text-xs text-brand-muted">• Real-Time NSE / BSE Prices</span>
+                <span className="text-xs text-brand-muted">• Real-Time NSE / BSE Feeds</span>
                 <span className="text-xs text-brand-green font-semibold flex items-center gap-1">
                   <span className="h-2 w-2 rounded-full bg-brand-green animate-pulse" /> Live Market Session
                 </span>
               </div>
               <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-tight">
-                Indian Market Alpha, <br />
-                <span className="sigma-gradient-text">Signals & Academy Store</span>
+                Indian Market Research, <br />
+                <span className="sigma-gradient-text">Advisory &amp; Trading Academy</span>
               </h1>
               <p className="mt-3 text-sm sm:text-base text-brand-muted leading-relaxed">
-                Unlock certified high-conviction Nifty & Bank Nifty F&O setups, multibagger cash swings, and master institutional trading strategies from SEBI-registered mentors.
+                Disciplined institutional F&amp;O setups, multibagger cash swings, and algorithmic price-action frameworks from certified market research analysts.
               </p>
 
               {/* Action Pillars & Audited Ledger */}
@@ -387,14 +410,14 @@ export default function IndianMarketMVPPage() {
                   className="sigma-btn-gold text-xs !py-3 !px-5 font-bold flex items-center gap-2 shadow-lg shadow-brand-gold/20"
                 >
                   <Sparkles className="h-4 w-4" />
-                  Subscription Plans & Tips Store
+                  Advisory Research Plans
                 </Link>
                 <Link
                   href="/courses"
                   className="sigma-btn-primary text-xs !py-3 !px-5 font-bold flex items-center gap-2 shadow-lg shadow-brand-blue/20"
                 >
                   <GraduationCap className="h-4 w-4" />
-                  Academy Courses Store
+                  Trading Academy
                 </Link>
                 <button
                   onClick={() => setIsVerifiedPnlOpen(true)}
@@ -408,7 +431,7 @@ export default function IndianMarketMVPPage() {
                   className="sigma-btn-outline text-xs !py-3 !px-4 font-bold flex items-center gap-2"
                 >
                   <User className="h-4 w-4" />
-                  My Customer Profile
+                  Client Portal
                 </Link>
               </div>
             </div>
@@ -780,16 +803,35 @@ export default function IndianMarketMVPPage() {
                         className="sigma-btn-gold text-[11px] !py-2 !px-4 font-bold flex items-center gap-1.5 shadow-md shadow-brand-gold/20"
                       >
                         <Lock className="h-3 w-3" />
-                        Unlock Call (View Plans →)
+                        Unlock Setup (View Plans →)
                       </Link>
                     ) : (
-                      <Link
-                        href="/dashboard"
-                        className="sigma-btn-primary text-[11px] !py-2 !px-3.5 font-semibold flex items-center gap-1"
-                      >
-                        <User className="h-3 w-3" />
-                        Track in Profile →
-                      </Link>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleCopyLevels(call)}
+                          className="bg-brand-dark hover:bg-brand-card border border-brand-border hover:border-brand-blue/50 text-[11px] text-brand-muted hover:text-white px-2.5 py-1.5 rounded-lg flex items-center gap-1 font-semibold transition-all"
+                          title="Copy levels to paste into your broker app"
+                        >
+                          {copiedId === call.id ? (
+                            <>
+                              <Check className="h-3 w-3 text-brand-green" />
+                              <span className="text-brand-green font-bold">Copied!</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="h-3 w-3" />
+                              <span>Copy Levels</span>
+                            </>
+                          )}
+                        </button>
+                        <Link
+                          href="/dashboard"
+                          className="sigma-btn-primary text-[11px] !py-1.5 !px-3 font-semibold flex items-center gap-1"
+                        >
+                          <User className="h-3 w-3" />
+                          Track →
+                        </Link>
+                      </div>
                     )}
                   </div>
                 </div>

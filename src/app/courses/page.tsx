@@ -78,7 +78,7 @@ export default function CoursesStorePage() {
       keyOutcomes: [
         "Detect institutional strike pinning on Bank Nifty expiry days",
         "Gamma scalping with strict 15% stop-loss boundary rules",
-        "Live 1-Click order execution with Zerodha & Groww brackets",
+        "Copy-Ready Levels formatted for Zerodha, Groww & AngelOne entry",
         "Includes access to Private Telegram Expiry Voice Room",
       ],
       curriculum: [

@@ -19,7 +19,7 @@ export default function MobileBottomNav() {
 
   const navItems = [
     {
-      label: "Calls",
+      label: "Advisory",
       href: "/",
       icon: TrendingUp,
       active: pathname === "/",
@@ -27,7 +27,7 @@ export default function MobileBottomNav() {
       badgeColor: "bg-brand-green text-black",
     },
     {
-      label: "VIP Plans",
+      label: "Research Plans",
       href: "/plans",
       icon: Sparkles,
       active: pathname === "/plans",
@@ -41,7 +41,7 @@ export default function MobileBottomNav() {
       active: pathname === "/courses",
     },
     {
-      label: "Terminal",
+      label: "Client Portal",
       href: "/dashboard",
       icon: User,
       active: pathname === "/dashboard",

@@ -70,7 +70,7 @@ export default function PlansStorePage() {
       features: [
         "2 to 4 high-probability F&O calls per day",
         "Exact Strike, Buy Price Zone, Target 1, Target 2 & Stop-Loss",
-        "Live 1-Click Order Execution for Zerodha, Groww & AngelOne",
+        "Instant Copy-Ready Levels for Zerodha, Groww, AngelOne & Dhan",
         "Instant WhatsApp & Telegram VIP Bot Channel Push",
         "Weekly Live Pre-Expiry Video Session (Thursdays 10:00 AM)",
       ],
@@ -159,6 +159,17 @@ export default function PlansStorePage() {
       <Navbar />
 
       <main className="min-h-screen pt-28 pb-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-12">
+        {/* Advisory-Only Disclosure Banner */}
+        <div className="flex items-start gap-3 bg-brand-gold/5 border border-brand-gold/20 rounded-xl px-4 py-3 text-xs text-brand-gold/80 leading-relaxed max-w-4xl mx-auto">
+          <ShieldCheck className="h-4 w-4 mt-0.5 shrink-0 text-brand-gold" />
+          <span>
+            <strong className="text-brand-gold">SEBI Research Advisory Disclosure:</strong>{" "}
+            SIGMAPRO is a SEBI-registered Independent Research Analyst (Reg. INH000008492) — not a broker or sub-broker.
+            All research recommendations are for informational purposes only. Execute trades independently on your preferred broker platform (Zerodha, Groww, AngelOne, Dhan, etc.).
+            Past performance is not indicative of future results.
+          </span>
+        </div>
+
         {/* Hero Banner */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-2 sigma-badge-gold text-xs font-bold">

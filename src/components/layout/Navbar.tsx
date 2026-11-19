@@ -93,7 +93,7 @@ export default function Navbar() {
                 </span>
               </div>
               <p className="text-[9px] text-brand-muted uppercase tracking-wider">
-                SEBI Reg. Signals & Investing MVP
+                SEBI Reg. Research Advisory Desk
               </p>
             </div>
           </Link>
@@ -104,26 +104,26 @@ export default function Navbar() {
               href="/"
               className="text-xs uppercase font-bold tracking-wider text-brand-muted hover:text-white transition-colors"
             >
-              Market Watch & Calls
+              Advisory Desk &amp; Calls
             </Link>
             <Link
               href="/plans"
               className="text-xs uppercase font-bold tracking-wider text-brand-gold hover:text-white transition-colors flex items-center gap-1"
             >
               <Sparkles className="h-3 w-3 text-brand-gold" />
-              Plans & Tips
+              Research Plans
             </Link>
             <Link
               href="/courses"
               className="text-xs uppercase font-bold tracking-wider text-brand-blue hover:text-white transition-colors"
             >
-              Academy Store
+              Trading Academy
             </Link>
             <Link
               href="/dashboard"
               className="text-xs uppercase font-bold tracking-wider text-brand-muted hover:text-white transition-colors"
             >
-              Dashboard
+              Client Portal
             </Link>
           </nav>
 
@@ -290,28 +290,28 @@ export default function Navbar() {
             onClick={() => setMobileOpen(false)}
             className="block text-sm font-semibold text-white py-1.5"
           >
-            Market Watch & Calls
+            Advisory Desk &amp; Calls
           </Link>
           <Link
             href="/plans"
             onClick={() => setMobileOpen(false)}
             className="block text-sm font-semibold text-brand-gold py-1.5"
           >
-            Subscription Plans & Tips Store
+            Advisory Research Plans
           </Link>
           <Link
             href="/courses"
             onClick={() => setMobileOpen(false)}
             className="block text-sm font-semibold text-brand-blue py-1.5"
           >
-            Academy & Courses Store
+            Trading Academy Masterclasses
           </Link>
           <Link
             href="/dashboard"
             onClick={() => setMobileOpen(false)}
             className="block text-sm font-semibold text-white py-1.5"
           >
-            Customer Profile Dashboard
+            Client Portal &amp; Dossier
           </Link>
 
           <div className="pt-2 border-t border-brand-border space-y-2">
