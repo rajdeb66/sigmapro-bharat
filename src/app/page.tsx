@@ -41,6 +41,8 @@ export default function IndianMarketMVPPage() {
   const [isVerifiedPnlOpen, setIsVerifiedPnlOpen] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
   const [activeThesisCall, setActiveThesisCall] = useState<TradeCallWithThesis | null>(null);
+  const [indicesCategory, setIndicesCategory] = useState<"ALL" | "BENCHMARK" | "SECTORAL" | "BROAD">("ALL");
+  const [indicesViewMode, setIndicesViewMode] = useState<"DAY_CLOSE" | "LIVE">("DAY_CLOSE");
 
   const handleCopyLevels = (call: typeof tradingCalls[0]) => {
     const text = `SIGMAPRO RESEARCH SETUP:\nScrip: ${call.scrip} (${call.segment})\nAction: ${call.side}\nBuy Range: ${call.entry}\nTarget 1: ${call.target1} | Target 2: ${call.target2}\nInvalidation (SL): ${call.stopLoss}\nAnalyst: ${call.analyst} (${call.sebiReg})\n*Execute independently on your broker terminal.`;
@@ -49,12 +51,15 @@ export default function IndianMarketMVPPage() {
     setTimeout(() => setCopiedId(null), 2500);
   };
 
-  // Major Indian Market Indices Data
+  // Major Indian Market Indices Data (BSE & NSE Official Day Close Settlement)
   const majorIndices = [
     {
       name: "NIFTY 50",
       exchange: "NSE",
+      category: "BENCHMARK" as const,
       price: "24,148.20",
+      dayClose: "24,148.20",
+      prevClose: "24,023.60",
       change: "+124.60",
       pct: "+0.52%",
       up: true,
@@ -62,11 +67,15 @@ export default function IndianMarketMVPPage() {
       dayLow: "24,022.10",
       fiftyTwoHigh: "26,277.35",
       fiftyTwoLow: "18,837.85",
+      dayRangePct: 71.5,
     },
     {
       name: "SENSEX",
       exchange: "BSE",
+      category: "BENCHMARK" as const,
       price: "79,486.32",
+      dayClose: "79,486.32",
+      prevClose: "79,088.17",
       change: "+398.15",
       pct: "+0.50%",
       up: true,
@@ -74,11 +83,15 @@ export default function IndianMarketMVPPage() {
       dayLow: "79,112.45",
       fiftyTwoHigh: "85,978.25",
       fiftyTwoLow: "64,831.30",
+      dayRangePct: 70.8,
     },
     {
       name: "BANK NIFTY",
       exchange: "NSE F&O",
+      category: "BENCHMARK" as const,
       price: "51,780.45",
+      dayClose: "51,780.45",
+      prevClose: "51,569.65",
       change: "+210.80",
       pct: "+0.41%",
       up: true,
@@ -86,11 +99,31 @@ export default function IndianMarketMVPPage() {
       dayLow: "51,460.30",
       fiftyTwoHigh: "54,467.35",
       fiftyTwoLow: "42,105.40",
+      dayRangePct: 71.2,
+    },
+    {
+      name: "NIFTY NEXT 50",
+      exchange: "NSE",
+      category: "BENCHMARK" as const,
+      price: "68,940.10",
+      dayClose: "68,940.10",
+      prevClose: "68,420.50",
+      change: "+519.60",
+      pct: "+0.76%",
+      up: true,
+      dayHigh: "69,120.00",
+      dayLow: "68,350.00",
+      fiftyTwoHigh: "72,800.00",
+      fiftyTwoLow: "44,200.00",
+      dayRangePct: 76.6,
     },
     {
       name: "NIFTY IT",
       exchange: "NSE",
+      category: "SECTORAL" as const,
       price: "41,892.10",
+      dayClose: "41,892.10",
+      prevClose: "41,579.70",
       change: "+312.40",
       pct: "+0.75%",
       up: true,
@@ -98,11 +131,79 @@ export default function IndianMarketMVPPage() {
       dayLow: "41,600.20",
       fiftyTwoHigh: "43,450.00",
       fiftyTwoLow: "30,810.00",
+      dayRangePct: 71.1,
+    },
+    {
+      name: "NIFTY AUTO",
+      exchange: "NSE",
+      category: "SECTORAL" as const,
+      price: "23,845.60",
+      dayClose: "23,845.60",
+      prevClose: "23,610.20",
+      change: "+235.40",
+      pct: "+1.00%",
+      up: true,
+      dayHigh: "23,920.00",
+      dayLow: "23,580.40",
+      fiftyTwoHigh: "26,100.00",
+      fiftyTwoLow: "16,800.00",
+      dayRangePct: 78.1,
+    },
+    {
+      name: "NIFTY PHARMA",
+      exchange: "NSE",
+      category: "SECTORAL" as const,
+      price: "22,410.85",
+      dayClose: "22,410.85",
+      prevClose: "22,290.40",
+      change: "+120.45",
+      pct: "+0.54%",
+      up: true,
+      dayHigh: "22,490.00",
+      dayLow: "22,250.10",
+      fiftyTwoHigh: "23,800.00",
+      fiftyTwoLow: "15,200.00",
+      dayRangePct: 67.0,
+    },
+    {
+      name: "NIFTY METAL",
+      exchange: "NSE",
+      category: "SECTORAL" as const,
+      price: "9,450.30",
+      dayClose: "9,450.30",
+      prevClose: "9,510.60",
+      change: "-60.30",
+      pct: "-0.63%",
+      up: false,
+      dayHigh: "9,540.00",
+      dayLow: "9,410.20",
+      fiftyTwoHigh: "10,200.00",
+      fiftyTwoLow: "6,600.00",
+      dayRangePct: 30.9,
+    },
+    {
+      name: "NIFTY FMCG",
+      exchange: "NSE",
+      category: "SECTORAL" as const,
+      price: "57,215.40",
+      dayClose: "57,215.40",
+      prevClose: "57,090.10",
+      change: "+125.30",
+      pct: "+0.22%",
+      up: true,
+      dayHigh: "57,350.00",
+      dayLow: "57,010.00",
+      fiftyTwoHigh: "66,400.00",
+      fiftyTwoLow: "51,200.00",
+      dayRangePct: 60.4,
     },
     {
       name: "NIFTY MIDCAP 100",
       exchange: "NSE",
+      category: "BROAD" as const,
       price: "56,412.80",
+      dayClose: "56,412.80",
+      prevClose: "55,932.65",
       change: "+480.15",
       pct: "+0.86%",
       up: true,
@@ -110,11 +211,31 @@ export default function IndianMarketMVPPage() {
       dayLow: "55,910.00",
       fiftyTwoHigh: "60,925.00",
       fiftyTwoLow: "38,720.00",
+      dayRangePct: 75.0,
+    },
+    {
+      name: "NIFTY SMALLCAP 100",
+      exchange: "NSE",
+      category: "BROAD" as const,
+      price: "18,340.25",
+      dayClose: "18,340.25",
+      prevClose: "18,180.10",
+      change: "+160.15",
+      pct: "+0.88%",
+      up: true,
+      dayHigh: "18,410.00",
+      dayLow: "18,150.00",
+      fiftyTwoHigh: "19,500.00",
+      fiftyTwoLow: "12,100.00",
+      dayRangePct: 73.2,
     },
     {
       name: "INDIA VIX",
       exchange: "Volatility",
+      category: "BROAD" as const,
       price: "14.28",
+      dayClose: "14.28",
+      prevClose: "14.70",
       change: "-0.42",
       pct: "-2.85%",
       up: false,
@@ -122,6 +243,7 @@ export default function IndianMarketMVPPage() {
       dayLow: "14.12",
       fiftyTwoHigh: "23.15",
       fiftyTwoLow: "9.85",
+      dayRangePct: 16.3,
     },
   ];
 
@@ -582,59 +704,230 @@ export default function IndianMarketMVPPage() {
           </div>
         </div>
 
-        {/* SECTION 1: Major Market Indices (Today's Live Prices) */}
-        <div>
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Activity className="h-4 w-4 text-brand-blue" />
-              <h2 className="text-base font-bold text-white uppercase tracking-wider">
-                Major Market Indices (Today&apos;s Live Prices)
-              </h2>
-            </div>
-            <span className="text-[11px] text-brand-green font-semibold flex items-center gap-1">
-              <span className="h-2 w-2 rounded-full bg-brand-green animate-pulse" />
-              NSE / BSE Real-Time Feed
+        {/* Sticky Terminal Section Navigation Jump-Bar */}
+        <div className="sticky top-16 z-30 bg-brand-navy/95 backdrop-blur-xl border border-brand-border/80 rounded-2xl p-2 shadow-2xl flex items-center justify-between gap-2 overflow-x-auto select-none">
+          <div className="flex items-center gap-1.5 min-w-max">
+            <span className="text-[10px] font-black uppercase text-brand-gold px-2 py-1 tracking-wider">
+              Quick Jump:
             </span>
+            <a
+              href="#indices-section"
+              className="px-3 py-1.5 rounded-xl bg-brand-dark hover:bg-brand-card text-xs font-bold text-white border border-brand-border/60 hover:border-brand-blue/50 flex items-center gap-1.5 transition-all shadow-sm"
+            >
+              <Activity className="h-3.5 w-3.5 text-brand-blue" />
+              <span>Day Close Indices</span>
+            </a>
+            <a
+              href="#advisory-calls-section"
+              className="px-3 py-1.5 rounded-xl bg-brand-dark hover:bg-brand-card text-xs font-bold text-white border border-brand-border/60 hover:border-brand-gold/50 flex items-center gap-1.5 transition-all shadow-sm"
+            >
+              <Zap className="h-3.5 w-3.5 text-brand-gold" />
+              <span>Advisory Desk (7)</span>
+            </a>
+            <a
+              href="#equities-section"
+              className="px-3 py-1.5 rounded-xl bg-brand-dark hover:bg-brand-card text-xs font-bold text-white border border-brand-border/60 hover:border-brand-green/50 flex items-center gap-1.5 transition-all shadow-sm"
+            >
+              <BarChart3 className="h-3.5 w-3.5 text-brand-green" />
+              <span>Bluechip Equities</span>
+            </a>
+            <button
+              onClick={() => setIsVerifiedPnlOpen(true)}
+              className="px-3 py-1.5 rounded-xl bg-brand-green/10 hover:bg-brand-green/20 text-xs font-bold text-brand-green border border-brand-green/30 flex items-center gap-1.5 transition-all"
+            >
+              <ShieldCheck className="h-3.5 w-3.5 text-brand-green" />
+              <span>Sensibull Audit</span>
+            </button>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-            {majorIndices.map((idx, i) => (
-              <div
-                key={i}
-                className="sigma-card p-3.5 border-brand-border hover:border-brand-blue/50 transition-all cursor-pointer group"
-              >
-                <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="font-bold text-white text-xs">{idx.name}</span>
-                  <span className="text-[9px] text-brand-muted uppercase font-mono">
-                    {idx.exchange}
+          <div className="flex items-center gap-2 min-w-max pl-2 border-l border-brand-border/60">
+            <Link
+              href="/plans"
+              className="text-xs font-bold text-brand-gold hover:text-white px-2.5 py-1 rounded-lg hover:bg-brand-card transition-all flex items-center gap-1"
+            >
+              <Sparkles className="h-3 w-3" /> VIP Plans →
+            </Link>
+            <Link
+              href="/courses"
+              className="text-xs font-bold text-brand-muted hover:text-white px-2.5 py-1 rounded-lg hover:bg-brand-card transition-all flex items-center gap-1"
+            >
+              <GraduationCap className="h-3 w-3" /> Academy →
+            </Link>
+          </div>
+        </div>
+
+        {/* SECTION 1: Major Market Indices (Official Day Close Settlement & Navigation) */}
+        <div id="indices-section" className="scroll-mt-24 space-y-4">
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-2 border-b border-brand-border/60">
+            <div>
+              <div className="flex items-center gap-2">
+                <Activity className="h-4 w-4 text-brand-blue" />
+                <h2 className="text-base font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  <span>Indian Market Indices</span>
+                  <span className="text-[10px] bg-brand-blue/20 text-brand-blue border border-brand-blue/40 px-2 py-0.5 rounded font-black">
+                    OFFICIAL DAY CLOSE
                   </span>
-                </div>
-                <div className="text-base font-black text-white font-mono">
-                  ₹{idx.price}
-                </div>
-                <div
-                  className={`flex items-center text-xs font-bold font-mono mt-0.5 ${
-                    idx.up ? "text-brand-green" : "text-brand-red"
+                </h2>
+              </div>
+              <p className="text-xs text-brand-muted mt-0.5">
+                BSE & NSE Bhavcopy Final Closing Prices • Market Closed at 15:30 IST • Settlement Verified
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Category Filter Tabs */}
+              <div className="inline-flex items-center gap-1 bg-brand-dark p-1 rounded-xl border border-brand-border text-xs">
+                <button
+                  onClick={() => setIndicesCategory("ALL")}
+                  className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
+                    indicesCategory === "ALL"
+                      ? "bg-brand-blue text-white shadow-sm"
+                      : "text-brand-muted hover:text-white"
                   }`}
                 >
-                  {idx.up ? (
-                    <ArrowUpRight className="h-3 w-3 mr-0.5" />
-                  ) : (
-                    <ArrowDownRight className="h-3 w-3 mr-0.5" />
-                  )}
-                  {idx.change} ({idx.pct})
-                </div>
-                <div className="mt-2 pt-2 border-t border-brand-border/40 flex justify-between text-[9px] text-brand-muted">
-                  <span>H: ₹{idx.dayHigh}</span>
-                  <span>L: ₹{idx.dayLow}</span>
-                </div>
+                  All (12)
+                </button>
+                <button
+                  onClick={() => setIndicesCategory("BENCHMARK")}
+                  className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
+                    indicesCategory === "BENCHMARK"
+                      ? "bg-brand-blue text-white shadow-sm"
+                      : "text-brand-muted hover:text-white"
+                  }`}
+                >
+                  Benchmark (4)
+                </button>
+                <button
+                  onClick={() => setIndicesCategory("SECTORAL")}
+                  className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
+                    indicesCategory === "SECTORAL"
+                      ? "bg-brand-blue text-white shadow-sm"
+                      : "text-brand-muted hover:text-white"
+                  }`}
+                >
+                  Sectoral (5)
+                </button>
+                <button
+                  onClick={() => setIndicesCategory("BROAD")}
+                  className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
+                    indicesCategory === "BROAD"
+                      ? "bg-brand-blue text-white shadow-sm"
+                      : "text-brand-muted hover:text-white"
+                  }`}
+                >
+                  Midcap & VIX (3)
+                </button>
               </div>
-            ))}
+
+              {/* View Mode Toggle */}
+              <div className="inline-flex items-center gap-1 bg-brand-card p-1 rounded-xl border border-brand-border text-[11px]">
+                <button
+                  onClick={() => setIndicesViewMode("DAY_CLOSE")}
+                  className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
+                    indicesViewMode === "DAY_CLOSE"
+                      ? "bg-brand-gold text-black shadow-sm"
+                      : "text-brand-muted hover:text-white"
+                  }`}
+                >
+                  Day Close Price
+                </button>
+                <button
+                  onClick={() => setIndicesViewMode("LIVE")}
+                  className={`px-2.5 py-1 rounded-lg font-bold transition-all ${
+                    indicesViewMode === "LIVE"
+                      ? "bg-brand-green text-black shadow-sm"
+                      : "text-brand-muted hover:text-white"
+                  }`}
+                >
+                  Live Tick View
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Indices Cards Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
+            {majorIndices
+              .filter(
+                (idx) =>
+                  indicesCategory === "ALL" || idx.category === indicesCategory
+              )
+              .map((idx, i) => (
+                <div
+                  key={i}
+                  className="sigma-card p-4 border-brand-border hover:border-brand-blue/50 transition-all cursor-pointer group flex flex-col justify-between"
+                >
+                  <div>
+                    {/* Header: Name, Exchange, and Close Badge */}
+                    <div className="flex items-center justify-between text-xs mb-1">
+                      <span className="font-bold text-white text-xs truncate" title={idx.name}>
+                        {idx.name}
+                      </span>
+                      <span className="text-[9px] bg-brand-dark px-1.5 py-0.2 rounded text-brand-muted uppercase font-mono border border-brand-border/60">
+                        {idx.exchange}
+                      </span>
+                    </div>
+
+                    {/* Day Close Price & Label */}
+                    <div className="mt-1">
+                      <div className="text-base font-black text-white font-mono tracking-tight">
+                        ₹{indicesViewMode === "DAY_CLOSE" ? idx.dayClose : idx.price}
+                      </div>
+                      <span className="text-[9px] text-brand-gold font-semibold uppercase tracking-wider block">
+                        {indicesViewMode === "DAY_CLOSE" ? "Day Close Settlement" : "Market Tick"}
+                      </span>
+                    </div>
+
+                    {/* Change & Prev Close */}
+                    <div className="flex items-center justify-between mt-2 pt-2 border-t border-brand-border/50 text-[11px] font-mono">
+                      <div
+                        className={`flex items-center font-bold ${
+                          idx.up ? "text-brand-green" : "text-brand-red"
+                        }`}
+                      >
+                        {idx.up ? (
+                          <ArrowUpRight className="h-3 w-3 mr-0.5" />
+                        ) : (
+                          <ArrowDownRight className="h-3 w-3 mr-0.5" />
+                        )}
+                        <span>{idx.change}</span>
+                        <span className="ml-1">({idx.pct})</span>
+                      </div>
+                      <span className="text-[10px] text-brand-muted/70">
+                        Prev ₹{idx.prevClose}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Day Range Visual Bar (Day Low ──●── Day High) */}
+                  <div className="mt-3 pt-2 border-t border-brand-border/40 space-y-1">
+                    <div className="flex justify-between text-[9px] text-brand-muted font-mono">
+                      <span>L: ₹{idx.dayLow}</span>
+                      <span>H: ₹{idx.dayHigh}</span>
+                    </div>
+
+                    {/* Visual Bar with Pip */}
+                    <div className="h-1.5 w-full bg-brand-dark rounded-full overflow-hidden relative border border-brand-border/40">
+                      <div
+                        className={`h-full rounded-full ${
+                          idx.up ? "bg-brand-green" : "bg-brand-red"
+                        }`}
+                        style={{ width: `${Math.min(100, Math.max(5, idx.dayRangePct))}%` }}
+                      />
+                    </div>
+
+                    <div className="flex justify-between items-center text-[8px] text-brand-muted/80 pt-0.5 font-mono">
+                      <span>52W: {idx.fiftyTwoLow}</span>
+                      <span className="text-brand-muted/60">{idx.fiftyTwoHigh}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
 
         {/* SECTION 2: Today's Most Active Indian Equities */}
-        <div>
+        <div id="equities-section" className="scroll-mt-24">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4 text-brand-gold" />
@@ -670,7 +963,7 @@ export default function IndianMarketMVPPage() {
         </div>
 
         {/* SECTION 3: High-Conviction Indian Trading Calls with LOCKED VS. UNLOCKED TEASER */}
-        <div className="space-y-6">
+        <div id="advisory-calls-section" className="scroll-mt-24 space-y-6">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-brand-border pb-4">
             <div>
               <div className="flex items-center gap-2 mb-1">

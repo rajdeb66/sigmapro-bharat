@@ -48,8 +48,8 @@ export default function Navbar() {
       <div className="bg-brand-dark/90 border-b border-brand-border/60 px-4 py-1.5 overflow-x-auto text-[11px] select-none">
         <div className="max-w-7xl mx-auto flex items-center gap-6 min-w-max">
           <div className="flex items-center gap-1.5 text-brand-muted font-semibold uppercase tracking-wider text-[10px]">
-            <span className="h-2 w-2 rounded-full bg-brand-green animate-pulse" />
-            <span>NSE/BSE LIVE</span>
+            <span className="h-2 w-2 rounded-full bg-brand-gold animate-pulse" />
+            <span className="text-brand-gold font-bold">NSE/BSE DAY CLOSE</span>
           </div>
 
           <div className="flex items-center gap-6">
